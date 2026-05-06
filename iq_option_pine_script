@@ -1,0 +1,28 @@
+//@version=5
+strategy("Katie Tutorials Secret Strategy", overlay=true)
+
+// Indicators
+ema11 = ta.ema(close, 11)
+ema55 = ta.ema(close, 55)
+psar = ta.sar(0.02, 0.02, 0.3)
+williams = ta.wpr(7)
+
+// Conditions
+emaUp = ema11 > ema55
+psarUp = psar < close
+wprUp = williams > -50 // Upward momentum
+
+longCondition = emaUp and psarUp and wprUp
+shortCondition = (not emaUp) and (not psarUp) and (not wprUp)
+
+// Plotting
+plot(ema11, color=color.green)
+plot(ema55, color=color.red)
+plot(psar, style=plot.style_cross, color=color.blue)
+
+// Signals
+if (longCondition)
+    strategy.entry("Buy", strategy.long)
+
+if (shortCondition)
+    strategy.entry("Sell", strategy.short)
